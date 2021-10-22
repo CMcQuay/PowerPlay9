@@ -8,7 +8,7 @@ class Monster :
 {
 public:
 	Monster() {};
-	Monster(const std::vector<Object*>& objects);
+	Monster(const Player& player);
 
 	void update(std::vector<Object*>& objects) override;
 	

@@ -17,10 +17,10 @@ void Monster::update(std::vector<Object*>& objects)
 	}
 }
 
-Monster::Monster(const std::vector<Object*>& objects)
+Monster::Monster(const Player& player)
 {
 	//set level based on player level
-	std::normal_distribution<double> monsterLevel((float)objects.front()->getLevel(), objects.front()->getLevel() / 4.0);
+	std::normal_distribution<double> monsterLevel((float)player.getLevel(), player.getLevel() / 4.0);
 	level = std::max(1, (int)monsterLevel(engine));
 
 	std::uniform_int_distribution<int> monsterType(1, (int)Object::Type::numTypes - 1);

@@ -30,19 +30,19 @@ int main()
 		system("pause");
 		system("cls");
 
-		while (!player.isDead() && objects.size() > 0)
+		while (!player.isDead() && objects.size() > 1)
 		{
 
 			displayBattle(objects);
 
-			//player.update(objects);
+			player.update(objects);
 
 			bringOutYourDead(objects);
 
 			std::cout << std::endl;
 			std::for_each(objects.begin() + 1, objects.end(), [&](Object* monster)
 				{
-					//monster.update(objects);
+					monster->update(objects);
 				});
 
 			system("PAUSE");
@@ -106,7 +106,7 @@ void bringOutYourDead(std::vector<Object*>& objects)
 				if (monster->isDead())
 				{
 
-					std::cout << monster << " has died!!!" << std::endl << std::endl;
+					std::cout << *monster << " has died!!!" << std::endl << std::endl;
 					return true;
 				}
 				return false;
