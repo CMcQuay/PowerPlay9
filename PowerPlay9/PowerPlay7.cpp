@@ -11,38 +11,38 @@
 #include "Player.h"
 #include "Monster.h"
 
-std::vector<Monster> createMonsters(const Player& player);
+std::vector<Object*> createMonsters(Player* player);
 
-void displayBattle(const Player& player, const std::vector<Monster>& monsters);
-void bringOutYourDead(std::vector<Monster>& monsters);
+void displayBattle(const std::vector<Object*>& monsters);
+void bringOutYourDead(std::vector<Object*>& monsters);
 
 
 int main()
 {
 	Player player;
-	std::vector<Monster> monsters;
+	std::vector<Object*> objects;
 	while (!player.isDead())
 	{
 		player.levelUp();
-		monsters = createMonsters(player);
+		objects = createMonsters(&player);
 
-		std::cout << monsters.size() << " monster(s) approaches!!" << std::endl;
+		std::cout << objects.size() << " monster(s) approaches!!" << std::endl;
 		system("pause");
 		system("cls");
 
-		while (!player.isDead() && monsters.size() > 0)
+		while (!player.isDead() && objects.size() > 0)
 		{
 
-			displayBattle(player, monsters);
+			displayBattle(objects);
 
-			player.update(player, monsters);
+			//player.update(objects);
 
-			bringOutYourDead(monsters);
+			bringOutYourDead(objects);
 
 			std::cout << std::endl;
-			std::for_each(monsters.begin(), monsters.end(), [&](Monster& monster)
+			std::for_each(objects.begin() + 1, objects.end(), [&](Object* monster)
 				{
-					monster.update(player, monsters);
+					//monster.update(objects);
 				});
 
 			system("PAUSE");
@@ -54,11 +54,11 @@ int main()
 	{
 		std::cout << "You Have Died" << std::endl;
 	}
-	if (player.isDead() && monsters.size() == 0)
+	if (player.isDead() && objects.size() == 0)
 	{
 		std::cout << "BUT" << std::endl;
 	}
-	if (monsters.size() == 0)
+	if (objects.size() == 0)
 	{
 		std::cout << "You have killed the monsters!!!" << std::endl;
 	}
@@ -68,41 +68,42 @@ int main()
 
 
 
-void displayBattle(const Player& player, const std::vector<Monster>& monsters)
+void displayBattle(const std::vector<Object*>& objects)
 {
 	Object::nameOnly = false; //TODO:: get rid of this and just dot he full cout.
-	std::cout << player << std::endl;
+	std::cout <<*objects[0] << std::endl;
 	std::cout << std::endl << "  Monsters: " << std::endl;
 	{
 		int i{ 1 };
-		std::for_each(monsters.begin(), monsters.end(), [&](const Monster& monster)
+		std::for_each(objects.begin() + 1, objects.end(), [&](const Object* monster)
 			{
-				std::cout << "   " << i << ". " << monster << std::endl;
+				std::cout << "   " << i << ". " << *monster << std::endl;
 
 				i++;
 			});
 	}
 }
 
-std::vector<Monster> createMonsters(const Player& player)
+std::vector<Object*> createMonsters(Player* player)
 {
-	std::normal_distribution<double> randomNumMonsters((double)player.getLevel(), player.getLevel() / 2.0);
-	std::vector<Monster> monsters(std::max(1, (int)randomNumMonsters(Object::engine)));
-	std::generate(monsters.begin(), monsters.end(), [&]()
+	std::normal_distribution<double> randomNumMonsters((double)player->getLevel(), player->getLevel() / 2.0);
+	std::vector<Object*> objects(1 + std::max(1, (int)randomNumMonsters(Object::engine)));
+	objects[0] = player;
+	std::generate(objects.begin() + 1, objects.end(), [&]()
 		{
-			return Monster(player);
+			return static_cast<Object*>( new Monster(*player));
 		});
-	return monsters;
+	return objects;
 }
 
-void bringOutYourDead(std::vector<Monster>& monsters)
+void bringOutYourDead(std::vector<Object*>& objects)
 {
 	Object::nameOnly = true;
-	monsters.erase(
-		std::remove_if(monsters.begin(), monsters.end(),
-			[](Object& monster)
+	objects.erase(
+		std::remove_if(objects.begin() + 1, objects.end(),
+			[](Object* monster)
 			{
-				if (monster.isDead())
+				if (monster->isDead())
 				{
 
 					std::cout << monster << " has died!!!" << std::endl << std::endl;
@@ -110,6 +111,6 @@ void bringOutYourDead(std::vector<Monster>& monsters)
 				}
 				return false;
 			}),
-		monsters.end());
+		objects.end());
 
 }
