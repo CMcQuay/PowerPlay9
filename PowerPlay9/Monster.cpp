@@ -2,14 +2,13 @@
 #include "Monster.h"
 #include "Player.h"
 
-void Monster::update(Player& player, std::vector<Monster>& monsters)
+void Monster::update(std::vector<Object*>& objects)
 {
 	std::bernoulli_distribution willAttack(.75);
 	if (willAttack(Object::engine))
 	{
-
 		std::cout << *this << " attacks!" << std::endl;
-		player.defend(attack());
+		objects.at(0)->defend(attack());
 	}
 	else
 	{
@@ -18,10 +17,10 @@ void Monster::update(Player& player, std::vector<Monster>& monsters)
 	}
 }
 
-Monster::Monster(const Player& player)
+Monster::Monster(const std::vector<Object*>& objects)
 {
 	//set level based on player level
-	std::normal_distribution<double> monsterLevel((float)player.getLevel(), player.getLevel() / 4.0);
+	std::normal_distribution<double> monsterLevel((float)objects.front()->getLevel(), objects.front()->getLevel() / 4.0);
 	level = std::max(1, (int)monsterLevel(engine));
 
 	std::uniform_int_distribution<int> monsterType(1, (int)Object::Type::numTypes - 1);
