@@ -11,7 +11,7 @@ public:
 	Player();
 
 	void levelUp();
-	void update(std::vector<Monster*>& monsters) override;
+	void update(std::vector<Object*>& objects) override;
 
 	int getLevel() const;
 	int getSP() const;
@@ -20,15 +20,15 @@ public:
 	void defend(int damage) override;
 	void print(std::ostream& o) const override;
 
-	std::map<Item*> getInventory() const;
+	std::map<Item::Type, Item> getInventory() const;
 	
 	void heal();
 
 
 private:
-	std::map<Item*> inventory;
+	std::map<Item::Type, Item> inventory;
 	int SP{ 0 };
 };
 
-std::ostream& operator<< (std::ostream& o, const std::map<Item*>& src);
+std::ostream& operator<< (std::ostream& o, const std::map<Item::Type, Item>& src);
 #endif // !PLAYER_H
