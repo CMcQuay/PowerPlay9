@@ -2,13 +2,13 @@
 #include "Monster.h"
 #include "Player.h"
 
-void Monster::update(Player*& player, std::vector<Object*>& objects)
+void Monster::update(std::vector<Object*>& objects)
 {
 	std::bernoulli_distribution willAttack(.75);
 	if (willAttack(Object::engine))
 	{
 		std::cout << *this << " attacks!" << std::endl;
-		player->defend(attack());
+		objects.at(0)->defend(attack());
 	}
 	else
 	{

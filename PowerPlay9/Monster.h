@@ -10,7 +10,7 @@ public:
 	Monster() {};
 	Monster(const std::vector<Object*>& objects);
 
-	void update(Player*& player, std::vector<Object*>& objects) override;
+	void update(std::vector<Object*>& objects) override;
 	
 	int attack() const override;
 	void defend(int damage) override;
