@@ -8,9 +8,9 @@ class Monster :
 {
 public:
 	Monster() {};
-	Monster(const Player& player);
+	Monster(const std::vector<Object*>& objects);
 
-	void update(Player& player, std::vector<Monster>& monsters) override;
+	void update(Player*& player, std::vector<Object*>& objects) override;
 	
 	int attack() const override;
 	void defend(int damage) override;
