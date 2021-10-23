@@ -39,9 +39,12 @@ void Player::levelUp()
 	}
 }
 
-void Player::update(Player& player, std::vector<Monster>& monsters)
+void Player::update(std::vector<Object*>& objects)
 {
-	
+	if (objects.size() = 1)
+	{
+		objects.front()->levelUp();
+	}
 	std::cout << "What do you do? (a)ttack (h)eal ";
 	char command{ 'x' };
 	std::cin >> command;
@@ -50,20 +53,20 @@ void Player::update(Player& player, std::vector<Monster>& monsters)
 	case 'a':
 	{
 		int monsterNum{ 1 };
-		if (monsters.size() > 1)
+		if ((objects.size() - 1) > 1)
 		{
 			std::cout << "Which Monster: ";
 			std::cin >> monsterNum;
 		}
-		if (monsterNum > 0 && monsterNum <= monsters.size())
+		if (monsterNum > 0 && monsterNum <= objects.size() - 1)
 		{
 
-			monsters[monsterNum - 1].defend(player.attack());
+			objects[monsterNum - 1].defend(objects.front()->attack());
 		}
 		break;
 	}
 	case 'h':
-		player.heal();
+		objects.front()->heal();
 		break;
 	default:
 		std::cout << "please enter a or h" << std::endl;
